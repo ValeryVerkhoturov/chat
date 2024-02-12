@@ -1,11 +1,10 @@
-# go-htmx-tailwind-example
+# Chat for embedding in site
 
-Example CRUD app written in Go + HTMX + Tailwind CSS
+## Example 
 
-This project implements a pure dynamic web app with SPA-like features but without heavy complex Javascript or Go frameworks to keep up with.  Just HTML/CSS + Go ❤️
-
-![screenshot](./screenshot.jpeg)
-
+```html
+<script src="http://localhost:8080/chat-widget?lang=en"></script>
+```
 
 ## Develop
 
