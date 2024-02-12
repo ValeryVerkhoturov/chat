@@ -41,15 +41,10 @@ func main() {
 	//add routes
 	router := http.NewServeMux()
 	router.Handle("/css/output.css", http.FileServer(http.FS(css)))
+	router.Handle("/images/", http.StripPrefix("/images/", http.FileServer(http.Dir("images"))))
 
-	router.Handle("/company/add", web.Action(companyAdd))
-	router.Handle("/company/add/", web.Action(companyAdd))
-
-	router.Handle("/company/edit", web.Action(companyEdit))
-	router.Handle("/company/edit/", web.Action(companyEdit))
-
-	router.Handle("/company", web.Action(companies))
-	router.Handle("/company/", web.Action(companies))
+	router.Handle("/chat-widget", web.Action(chatWidgetGet))
+	router.Handle("/chat-container", web.Action(chatContainerGet))
 
 	router.Handle("/", web.Action(index))
 	router.Handle("/index.html", web.Action(index))

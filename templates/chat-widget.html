@@ -1,0 +1,65 @@
+<div>
+    <script src="https://unpkg.com/htmx.org@1.9.2"></script>
+    <link href="{{ .PublicUrl }}css/output.css" rel="stylesheet" />
+    <div id="support-chat-modal" class="fixed right-4 bottom-4 z-50 flex flex-col items-end">
+        <div id="chat-container" class="hidden animate-fadeInUp"></div>
+
+        <div class="w-48" id="chat-btn-with-options">
+            <div id="chat-btn-options" class="hidden w-full flex flex-col space-x-2 shadow-lg rounded-full mb-2">
+                <a target="_blank" href="{{ .TelegramUrl }}" class="flex items-center justify-center hover:bg-gray-100 text-sky-500 p-3 rounded-full">
+                    <img src="{{ .PublicUrl }}images/tg-logo.png" alt="Telegram logo" class="w-5 h-5 mr-1">
+                    Telegram
+                </a>
+            </div>
+
+            <button id="toggle-chat-btn" class="w-full bg-blue-500-white p-3 rounded-full shadow-lg hover:bg-gray-100"
+                    hx-get="{{ .PublicUrl }}chat-container" hx-vars="lang:localStorage.getItem('chat-locale')" hx-trigger="click once"
+                    hx-swap="innerHTML" hx-target="#chat-container"
+            >
+                <span class="flex items-center justify-center">
+                    <svg class="w-6 h-6 text-gray-800 mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.5 10a2.5 2.5 0 1 1 5 .2 2.4 2.4 0 0 1-2.5 2.4V14m0 3h0m9-5a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                    </svg>
+                    {{ .Locale.chatName }}
+                </span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        localStorage.setItem('chat-locale', '{{ .LocaleName }}');
+        document.getElementById('toggle-chat-btn').addEventListener('click', function() {
+            let chatContainer = document.getElementById('chat-container');
+            let isVisible = !chatContainer.classList.contains('hidden');
+            if (isVisible) {
+                chatContainer.classList.add('hidden');
+            } else {
+                const chatButtonOptions = document.getElementById('chat-btn-options');
+                const optionsAreVisible = !chatButtonOptions.classList.contains('hidden');
+
+                chatContainer.classList.remove('hidden');
+                if (optionsAreVisible) {
+                    chatButtonOptions.classList.add('hidden');
+                }
+            }
+        });
+        document.getElementById('chat-btn-with-options').addEventListener('mouseover', function() {
+            const chatButtonOptions = document.getElementById('chat-btn-options');
+            const optionsAreVisible = !chatButtonOptions.classList.contains('hidden');
+
+            const chatContainer = document.getElementById('chat-container');
+            const chatIsVisible = !chatContainer.classList.contains('hidden');
+
+            if (!optionsAreVisible && !chatIsVisible) {
+                chatButtonOptions.classList.remove('hidden');
+            }
+        });
+        document.getElementById('chat-btn-with-options').addEventListener('mouseout', function() {
+            let chatButtonOptions = document.getElementById('chat-btn-options');
+
+            if (!chatButtonOptions.classList.contains('hidden')) {
+                chatButtonOptions.classList.add('hidden');
+            }
+        });
+    </script>
+</div>

@@ -1,81 +1,52 @@
 package main
 
 import (
-	"net/http"
-
+	"github.com/ValeryVerkhoturov/chat/config"
+	"github.com/ValeryVerkhoturov/chat/l10n"
+	"github.com/ValeryVerkhoturov/chat/utils"
 	"github.com/jritsema/gotoolbox/web"
+	"net/http"
 )
 
-// Delete -> DELETE /company/{id} -> delete, companys.html
-
-// Edit   -> GET /company/edit/{id} -> row-edit.html
-// Save   ->   PUT /company/{id} -> update, row.html
-// Cancel ->	 GET /company/{id} -> nothing, row.html
-
-// Add    -> GET /company/add/ -> companys-add.html (target body with row-add.html and row.html)
-// Save   ->   POST /company -> add, companys.html (target body without row-add.html)
-// Cancel ->	 GET /company -> nothing, companys.html
+type DataWithLocale struct {
+	Data        interface{}
+	PublicUrl   string
+	Locale      l10n.Locale
+	LocaleName  string
+	TelegramUrl string
+}
 
 func index(r *http.Request) *web.Response {
-	return web.HTML(http.StatusOK, html, "index.html", data, nil)
+	locale, localeName := utils.GetLocale(r)
+
+	return web.HTML(http.StatusOK, html, "index.html", DataWithLocale{
+		PublicUrl:   config.PublicUrl,
+		Locale:      locale,
+		LocaleName:  localeName,
+		TelegramUrl: config.TelegramUrl,
+	}, nil)
 }
 
-// GET /company/add
-func companyAdd(r *http.Request) *web.Response {
-	return web.HTML(http.StatusOK, html, "company-add.html", data, nil)
+// /GET chat-widget
+func chatWidgetGet(r *http.Request) *web.Response {
+	locale, localeName := utils.GetLocale(r)
+
+	return utils.EmbeddedJS(http.StatusOK, html, "chat-widget.html", DataWithLocale{
+		PublicUrl:   config.PublicUrl,
+		Locale:      locale,
+		LocaleName:  localeName,
+		TelegramUrl: config.TelegramUrl,
+	}, nil)
 }
 
-// /GET company/edit/{id}
-func companyEdit(r *http.Request) *web.Response {
-	id, _ := web.PathLast(r)
-	row := getCompanyByID(id)
-	return web.HTML(http.StatusOK, html, "row-edit.html", row, nil)
-}
+// /GET chat-container
+func chatContainerGet(r *http.Request) *web.Response {
+	locale, localeName := utils.GetLocale(r)
 
-// GET /company
-// GET /company/{id}
-// DELETE /company/{id}
-// PUT /company/{id}
-// POST /company
-func companies(r *http.Request) *web.Response {
-	id, segments := web.PathLast(r)
-	switch r.Method {
-
-	case http.MethodDelete:
-		deleteCompany(id)
-		return web.HTML(http.StatusOK, html, "companies.html", data, nil)
-
-	//cancel
-	case http.MethodGet:
-		if segments > 1 {
-			//cancel edit
-			row := getCompanyByID(id)
-			return web.HTML(http.StatusOK, html, "row.html", row, nil)
-		} else {
-			//cancel add
-			return web.HTML(http.StatusOK, html, "companies.html", data, nil)
-		}
-
-	//save edit
-	case http.MethodPut:
-		row := getCompanyByID(id)
-		r.ParseForm()
-		row.Company = r.Form.Get("company")
-		row.Contact = r.Form.Get("contact")
-		row.Country = r.Form.Get("country")
-		updateCompany(row)
-		return web.HTML(http.StatusOK, html, "row.html", row, nil)
-
-	//save add
-	case http.MethodPost:
-		row := Company{}
-		r.ParseForm()
-		row.Company = r.Form.Get("company")
-		row.Contact = r.Form.Get("contact")
-		row.Country = r.Form.Get("country")
-		addCompany(row)
-		return web.HTML(http.StatusOK, html, "companies.html", data, nil)
-	}
-
-	return web.Empty(http.StatusNotImplemented)
+	return web.HTML(http.StatusOK, html, "chat-container.html", DataWithLocale{
+		PublicUrl:   config.PublicUrl,
+		Locale:      locale,
+		LocaleName:  localeName,
+		TelegramUrl: config.TelegramUrl,
+	}, nil)
 }

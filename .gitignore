@@ -3,3 +3,6 @@ app
 *.test
 *.out
 tmp
+.env
+
+.idea/
