@@ -5,6 +5,7 @@ import (
 	"github.com/ValeryVerkhoturov/chat/config"
 	"github.com/ValeryVerkhoturov/chat/controller"
 	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,6 +13,7 @@ func main() {
 
 	router := gin.Default()
 	router.Use(cors.Default()) // AllowAllOrigins true
+	router.Use(gzip.Gzip(gzip.DefaultCompression))
 
 	router.Static("/images/", "./images")
 	router.StaticFile("/css/output-css", "./css/output.css")
