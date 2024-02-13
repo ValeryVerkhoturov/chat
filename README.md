@@ -3,7 +3,7 @@
 ## Example 
 
 ```html
-<script src="http://localhost:8080/chat-widget?lang=en"></script>
+<script async src="http://localhost:8080/v1/chat-widget?lang=en"></script>
 ```
 
 ## Develop

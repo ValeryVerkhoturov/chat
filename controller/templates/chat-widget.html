@@ -20,23 +20,23 @@
             </div>
         </div>
 
-        <div class="w-48" id="chat-btn-with-options">
+        <div class="w-16 md:w-48" id="chat-btn-with-options">
             <div id="chat-btn-options" class="hidden w-full flex flex-col space-x-2 shadow-lg rounded-full mb-2">
-                <a target="_blank" href="{{ .TelegramUrl }}" class="flex items-center justify-center hover:bg-gray-100 text-sky-500 p-3 rounded-full">
-                    <img src="{{ .PublicUrl }}images/tg-logo.png" alt="Telegram logo" class="w-5 h-5 mr-1">
-                    Telegram
+                <a target="_blank" href="{{ .TelegramUrl }}" class="flex items-center justify-center hover:bg-gray-100 text-sky-500 p-3 rounded-full space-x-1">
+                    <img src="{{ .PublicUrl }}images/tg-logo.png" alt="Telegram logo" class="w-5 h-5">
+                    <span class="hidden md:block">Telegram</span>
                 </a>
             </div>
 
-            <button id="toggle-chat-btn" class="w-full bg-blue-500-white p-3 rounded-full shadow-lg hover:bg-gray-100"
-                    hx-get="{{ .PublicUrl }}chat-container" hx-vars="lang:localStorage.getItem('chat-locale')" hx-trigger="click once"
+            <button id="toggle-chat-btn" class="w-full bg-blue-500 text-white p-3 rounded-full shadow-lg hover:bg-blue-600"
+                    hx-get="{{ .PublicUrl }}v{{ .APIVersion }}/chat-container" hx-vars="lang:localStorage.getItem('chat-locale')" hx-trigger="click once"
                     hx-swap="innerHTML" hx-target="#chat-container" hx-indicator="#chat-container-loading"
             >
-                <span class="flex items-center justify-center">
-                    <svg class="w-6 h-6 text-gray-800 mr-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.5 10a2.5 2.5 0 1 1 5 .2 2.4 2.4 0 0 1-2.5 2.4V14m0 3h0m9-5a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                <span class="flex items-center justify-center space-x-1">
+                    <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <path stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.5 10a2.5 2.5 0 1 1 5 .2 2.4 2.4 0 0 1-2.5 2.4V14m0 3h0m9-5a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
                     </svg>
-                    {{ .Locale.chatName }}
+                    <span class="hidden md:block">{{ .Locale.chatName }}</span>
                 </span>
             </button>
         </div>

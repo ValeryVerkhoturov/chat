@@ -1,27 +1,47 @@
-package main
+package controller
 
 import (
 	"bytes"
+	"embed"
 	"github.com/ValeryVerkhoturov/chat/config"
-	"github.com/ValeryVerkhoturov/chat/l10n"
+	"github.com/ValeryVerkhoturov/chat/i18n"
 	"github.com/ValeryVerkhoturov/chat/requestUtils"
 	"github.com/gin-gonic/gin"
+	"html/template"
 	"log"
 	"net/http"
 )
 
-type DataWithLocale struct {
+var (
+	//go:embed all:templates/*
+	templateFS embed.FS
+
+	//parsed templates
+	html *template.Template
+)
+
+func init() {
+	var err error
+	html, err = requestUtils.TemplateParseFSRecursive(templateFS, ".html", true, nil)
+	if err != nil {
+		panic(err)
+	}
+}
+
+type TemplateData struct {
+	APIVersion  int
 	Data        interface{}
 	PublicUrl   string
-	Locale      l10n.Locale
+	Locale      i18n.Locale
 	LocaleName  string
 	TelegramUrl string
 }
 
-func index(c *gin.Context) {
+func Index(c *gin.Context) {
 	locale, localeName := requestUtils.GetLocale(c)
 
-	c.HTML(http.StatusOK, "index.html", DataWithLocale{
+	c.HTML(http.StatusOK, "index.html", TemplateData{
+		APIVersion:  1,
 		PublicUrl:   config.PublicUrl,
 		Locale:      locale,
 		LocaleName:  localeName,
@@ -29,13 +49,14 @@ func index(c *gin.Context) {
 	})
 }
 
-func chatWidget(c *gin.Context) {
+func ChatWidgetV1(c *gin.Context) {
 	locale, localeName := requestUtils.GetLocale(c)
 
 	c.Header("Content-Type", "application/javascript")
 
 	var buf bytes.Buffer
-	err := html.ExecuteTemplate(&buf, "chat-widget.html", DataWithLocale{
+	err := html.ExecuteTemplate(&buf, "chat-widget.html", TemplateData{
+		APIVersion:  1,
 		PublicUrl:   config.PublicUrl,
 		Locale:      locale,
 		LocaleName:  localeName,
@@ -52,10 +73,11 @@ func chatWidget(c *gin.Context) {
 	c.String(http.StatusOK, jsContent)
 }
 
-func chatContainer(c *gin.Context) {
+func ChatContainerV1(c *gin.Context) {
 	locale, localeName := requestUtils.GetLocale(c)
 
-	c.HTML(http.StatusOK, "chat-container.html", DataWithLocale{
+	c.HTML(http.StatusOK, "chat-container.html", TemplateData{
+		APIVersion:  1,
 		PublicUrl:   config.PublicUrl,
 		Locale:      locale,
 		LocaleName:  localeName,

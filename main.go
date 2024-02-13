@@ -1,44 +1,33 @@
 package main
 
 import (
-	"embed"
 	"fmt"
-	"github.com/ValeryVerkhoturov/chat/requestUtils"
+	"github.com/ValeryVerkhoturov/chat/config"
+	"github.com/ValeryVerkhoturov/chat/controller"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	"html/template"
-)
-
-var (
-	//go:embed all:templates/*
-	templateFS embed.FS
-
-	//parsed templates
-	html *template.Template
 )
 
 func main() {
-
-	var err error
-	html, err = requestUtils.TemplateParseFSRecursive(templateFS, ".html", true, nil)
-	if err != nil {
-		panic(err)
-	}
 
 	router := gin.Default()
 	router.Use(cors.Default()) // AllowAllOrigins true
 
 	router.Static("/images/", "./images")
 	router.StaticFile("/css/output-css", "./css/output.css")
-	router.LoadHTMLGlob("templates/*")
+	router.LoadHTMLGlob("controller/templates/*")
 
-	router.GET("/", index)
-	router.GET("/index.html", index)
-	router.GET("/chat-widget", chatWidget)
-	router.GET("/chat-container", chatContainer)
+	router.GET("/", controller.Index)
+	router.GET("/index.html", controller.Index)
+	router.GET("/v1/chat-widget", controller.ChatWidgetV1)
+	router.GET("/v1/chat-container", controller.ChatContainerV1)
 
-	fmt.Println("Listening on http://localhost:8080")
-	err = router.Run()
+	var port = config.Port
+	if config.Port == "" {
+		port = "8080"
+	}
+	fmt.Println("Listening on http://" + config.Host + ":" + port)
+	err := router.Run(":" + port)
 	if err != nil {
 		fmt.Println(err)
 	}

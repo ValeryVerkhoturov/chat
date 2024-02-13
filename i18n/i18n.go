@@ -1,4 +1,4 @@
-package l10n
+package i18n
 
 import (
 	"encoding/json"
@@ -19,7 +19,7 @@ var (
 
 func init() {
 	var err error
-	LocalesMap, err = readLocales("l10n/locales")
+	LocalesMap, err = readLocales("i18n/locales")
 	if err != nil {
 		panic(err)
 	}

@@ -1,5 +1,5 @@
 <div class="relative">
-  <div id="emoji-picker" class="p-1 -top-16 left-0 w-32 h-16 grid grid-cols-5 gap-x-1 border border-gray-300 rounded-lg absolute hidden overflow-hidden bg-white">
+  <div id="emoji-picker" class="select-none p-1 -top-16 left-0 w-32 h-16 grid grid-cols-5 gap-x-1 border border-gray-300 rounded-lg absolute hidden overflow-hidden bg-white">
     <!-- Emojis will go here -->
   </div>
   <button id="emoji-button" type="button" class="p-2 text-gray-500 rounded-lg cursor-pointer hover:text-gray-900 hover:bg-gray-100">
@@ -10,7 +10,7 @@
   <script>
     const emojiButton = document.getElementById('emoji-button');
     const emojiPicker = document.getElementById('emoji-picker');
-    const emojis = ['👍', '👎', '🔥', '❤️', '😀', '😭', '😁', '🤣', `🍆`];
+    const emojis = ['👍', '👎', '🔥', '❤️', '😀', '😭', '😁', '🤣'];
 
     emojiButton.addEventListener('click', () => {
       emojiPicker.classList.toggle('hidden');
