@@ -1,10 +1,12 @@
 package main
 
 import (
+	"bytes"
 	"github.com/ValeryVerkhoturov/chat/config"
 	"github.com/ValeryVerkhoturov/chat/l10n"
-	"github.com/ValeryVerkhoturov/chat/utils"
-	"github.com/jritsema/gotoolbox/web"
+	"github.com/ValeryVerkhoturov/chat/requestUtils"
+	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 )
 
@@ -16,37 +18,47 @@ type DataWithLocale struct {
 	TelegramUrl string
 }
 
-func index(r *http.Request) *web.Response {
-	locale, localeName := utils.GetLocale(r)
+func index(c *gin.Context) {
+	locale, localeName := requestUtils.GetLocale(c)
 
-	return web.HTML(http.StatusOK, html, "index.html", DataWithLocale{
+	c.HTML(http.StatusOK, "index.html", DataWithLocale{
 		PublicUrl:   config.PublicUrl,
 		Locale:      locale,
 		LocaleName:  localeName,
 		TelegramUrl: config.TelegramUrl,
-	}, nil)
+	})
 }
 
-// /GET chat-widget
-func chatWidgetGet(r *http.Request) *web.Response {
-	locale, localeName := utils.GetLocale(r)
+func chatWidget(c *gin.Context) {
+	locale, localeName := requestUtils.GetLocale(c)
 
-	return utils.EmbeddedJS(http.StatusOK, html, "chat-widget.html", DataWithLocale{
+	c.Header("Content-Type", "application/javascript")
+
+	var buf bytes.Buffer
+	err := html.ExecuteTemplate(&buf, "chat-widget.html", DataWithLocale{
 		PublicUrl:   config.PublicUrl,
 		Locale:      locale,
 		LocaleName:  localeName,
 		TelegramUrl: config.TelegramUrl,
-	}, nil)
+	})
+	if err != nil {
+		log.Println(err)
+		c.Status(http.StatusInternalServerError)
+		return
+	}
+
+	var jsContent = requestUtils.WrapHTMLWithEmbeddingJS(buf)
+
+	c.String(http.StatusOK, jsContent)
 }
 
-// /GET chat-container
-func chatContainerGet(r *http.Request) *web.Response {
-	locale, localeName := utils.GetLocale(r)
+func chatContainer(c *gin.Context) {
+	locale, localeName := requestUtils.GetLocale(c)
 
-	return web.HTML(http.StatusOK, html, "chat-container.html", DataWithLocale{
+	c.HTML(http.StatusOK, "chat-container.html", DataWithLocale{
 		PublicUrl:   config.PublicUrl,
 		Locale:      locale,
 		LocaleName:  localeName,
 		TelegramUrl: config.TelegramUrl,
-	}, nil)
+	})
 }
