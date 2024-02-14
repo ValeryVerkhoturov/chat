@@ -14,7 +14,10 @@ var (
 
 func init() {
 	var err error
-	err = godotenv.Load()
+
+	if os.Getenv("GO_ENV") != "production" {
+		err = godotenv.Load()
+	}
 	if err != nil {
 		panic(err)
 	}
