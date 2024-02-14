@@ -3,7 +3,7 @@ package requestUtils
 import (
 	"bytes"
 	"fmt"
-	"github.com/ValeryVerkhoturov/chat/i18n"
+	"github.com/ValeryVerkhoturov/chat/utils/i18nUtils"
 	"github.com/gin-gonic/gin"
 	"html/template"
 	"io/fs"
@@ -38,15 +38,15 @@ func WrapHTMLWithEmbeddingJS(buf bytes.Buffer) string {
         `, &buf)
 }
 
-func GetLocale(c *gin.Context) (i18n.Locale, string) {
+func GetLocale(c *gin.Context) (i18nUtils.Locale, string) {
 	localeName := "ru"
 	lang := c.Query("lang")
 
-	locale, ok := i18n.LocalesMap[lang]
+	locale, ok := i18nUtils.LocalesMap[lang]
 	if ok {
 		localeName = lang
 	} else {
-		locale = i18n.LocalesMap[localeName]
+		locale = i18nUtils.LocalesMap[localeName]
 	}
 	return locale, localeName
 }

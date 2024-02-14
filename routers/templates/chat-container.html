@@ -1,6 +1,11 @@
 <div class="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col w-80">
-    <div class="px-4 py-2 bg-blue-500">
-        <h3 class="text-lg font-semibold text-white">{{ .Locale.chatHeader }}</h3>
+    <div class="px-4 py-2 bg-blue-500 flex flex-row items-center justify-center">
+        <h3 class="text-lg font-semibold text-white grow">{{ .Locale.chatHeader }}</h3>
+        <button id="close-chat-btn" class="w-6 h-6 flex-none">
+            <svg class="w-6 h-6 flex-none" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                <path stroke="white" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18 18 6m0 12L6 6"/>
+            </svg>
+        </button>
     </div>
     <div id="chat-content" class="flex-grow p-4 h-96 overflow-auto">
         <!-- Chat messages will be dynamically loaded here -->
@@ -24,4 +29,7 @@
             {{ template "emoji-keyboard.html" . }}
         </div>
     </form>
+    <script>
+        document.getElementById('close-chat-btn').addEventListener('click', window.showOrHideChat);
+    </script>
 </div>

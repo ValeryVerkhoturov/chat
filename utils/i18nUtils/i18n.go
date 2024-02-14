@@ -1,4 +1,4 @@
-package i18n
+package i18nUtils
 
 import (
 	"encoding/json"
@@ -9,17 +9,13 @@ import (
 	"strings"
 )
 
-type Locale = map[string]string
-
-type Locales map[string]Locale
-
 var (
-	LocalesMap map[string]Locale
+	LocalesMap Locales
 )
 
 func init() {
 	var err error
-	LocalesMap, err = readLocales("i18n/locales")
+	LocalesMap, err = readLocales("utils/i18nUtils/locales")
 	if err != nil {
 		panic(err)
 	}

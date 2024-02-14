@@ -1,8 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./controller/templates/**/*.{html,js}", "./images/**/*.svg"],
+  content: ["./routers/templates/**/*.{html,js}", "./images/**/*.svg"],
   theme: {
     extend: {
+      zIndex: {
+        'max': '2147483647',
+      },
       fontSize: {
           "base": "14px",
       },
