@@ -87,3 +87,7 @@ func TemplateParseFSRecursive(
 	})
 	return root, err
 }
+
+func GetApplicationError(errorDescription string) gin.H {
+	return gin.H{"error": errorDescription}
+}

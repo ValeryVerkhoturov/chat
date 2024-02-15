@@ -1,4 +1,4 @@
-package routers
+package handlers
 
 import (
 	"github.com/ValeryVerkhoturov/chat/utils/i18nUtils"

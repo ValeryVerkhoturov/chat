@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./routers/templates/**/*.{html,js}", "./images/**/*.svg"],
+  content: ["./templates/templates/**/*.{html,js}", "./public/images/**/*.svg"],
   theme: {
     extend: {
       zIndex: {

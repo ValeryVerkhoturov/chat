@@ -28,7 +28,7 @@ WORKDIR /
 # Copy our static executable.
 COPY --from=builder /go/main /go/main
 COPY public /go/public
-COPY routers/templates /go/routers/templates
+COPY templates/templates /go/templates/templates
 COPY utils/i18nUtils/locales /go/utils/i18nUtils/locales
 
 ENV PORT 8080
